@@ -1,6 +1,5 @@
 package com.wersiv.datingsite.backend.user.mapper;
 
-//TODO: complete mapper
 
 import com.wersiv.datingsite.backend.user.dto.CreateUserRequest;
 import com.wersiv.datingsite.backend.user.dto.UserResponse;

@@ -24,7 +24,7 @@ databaseChangeLog:
                   type: varchar(100)
                   constraints:
                     nullable: false
-              - column: #plaintext for now
+              - column:
                   name: password
                   type: varchar(255)
                   constraints:

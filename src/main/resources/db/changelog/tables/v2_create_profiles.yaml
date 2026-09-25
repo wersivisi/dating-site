@@ -1,0 +1,53 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: wersiv
+      changes:
+        - createTable:
+            tableName: profiles
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: handle
+                  type: varchar(32)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: display_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: bio
+                  type: text
+              - column:
+                  name: preferences
+                  type: text
+              - column:
+                  name: avatar_path
+                  type: varchar(255)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: profiles
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_profiles_user
+            onDelete: CASCADE

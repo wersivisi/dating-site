@@ -1,10 +1,10 @@
 package com.wersiv.datingsite.backend.user.exception;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import com.wersiv.datingsite.backend.common.exception.LocalizedException;
+import org.springframework.http.HttpStatus;
 
-public class EmailAlreadyExistsException extends RuntimeException {
-    public EmailAlreadyExistsException(@NotBlank @Email String email) {
-        super(email + " already exists");
+public class EmailAlreadyExistsException extends LocalizedException {
+    public EmailAlreadyExistsException(String email) {
+        super(HttpStatus.CONFLICT, "error.user.email_taken", email);
     }
 }

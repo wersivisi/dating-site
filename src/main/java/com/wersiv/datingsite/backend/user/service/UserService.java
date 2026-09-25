@@ -4,16 +4,15 @@ import com.wersiv.datingsite.backend.user.dto.CreateUserRequest;
 import com.wersiv.datingsite.backend.user.dto.UserResponse;
 import com.wersiv.datingsite.backend.user.entity.User;
 import com.wersiv.datingsite.backend.user.exception.EmailAlreadyExistsException;
-import com.wersiv.datingsite.backend.user.exception.InvalidCredentialsException;
 import com.wersiv.datingsite.backend.user.exception.UserNotFoundException;
 import com.wersiv.datingsite.backend.user.mapper.UserMapper;
 import com.wersiv.datingsite.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponse createUser(CreateUserRequest request) {
 
@@ -31,6 +31,7 @@ public class UserService {
         }
 
         User user = userMapper.toEntity(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         User saved = userRepository.save(user);
 
         return userMapper.toResponse(saved);
@@ -46,12 +47,5 @@ public class UserService {
         return userRepository.findAll().stream()
                 .map(userMapper::toResponse)
                 .collect(Collectors.toList());
-
     }
-
-    public User findByEmailAndPassword(String email, String password) {
-        return userRepository.findByEmailAndPassword(email, password)
-                .orElseThrow(() -> new InvalidCredentialsException());
-    }
-
 }

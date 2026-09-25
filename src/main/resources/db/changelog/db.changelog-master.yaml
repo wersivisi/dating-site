@@ -1,6 +1,9 @@
 databaseChangeLog:
-  - changeSet:
-      id: 0
-      author: wersiv
-      changes:
-        -
+  - include:
+      file: db/changelog/tables/v1_create_users.yaml
+  - include:
+      file: db/changelog/tables/v2_create_profiles.yaml
+  - include:
+      file: db/changelog/tables/v3_create_friendships.yaml
+  - include:
+      file: db/changelog/tables/v4_create_messages.yaml
