@@ -13,6 +13,8 @@ import java.util.Optional;
 @Repository
 public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
+    List<Friendship> findByRequesterIdOrAddresseeId(Long requesterId, Long addresseeId);
+
     @Query("select f from Friendship f where " +
             "(f.requesterId = :userA and f.addresseeId = :userB) or " +
             "(f.requesterId = :userB and f.addresseeId = :userA)")

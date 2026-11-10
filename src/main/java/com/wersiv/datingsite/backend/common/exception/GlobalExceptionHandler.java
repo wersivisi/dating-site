@@ -12,12 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
-/**
- * All error messages are resolved through MessageSource (messages.properties /
- * messages_ru.properties) using the locale Spring picked from the request's
- * Accept-Language header - see LocaleConfig.
- */
-@RestControllerAdvice
+@RestControllerAdvice(annotations = org.springframework.web.bind.annotation.RestController.class)
 public class GlobalExceptionHandler {
 
     private final MessageSource messageSource;

@@ -26,6 +26,23 @@ public class CreateProfileRequest {
     @Size(max = 2000, message = "{validation.bio.size}")
     private String bio;
 
+    private java.time.LocalDate birthdate;
+
+    @Size(max = 255)
+    private String city;
+
+    @Size(max = 255)
+    private String gender;
+
+    @Size(max = 255)
+    private String interests;
+
+    @Size(max = 255)
+    private String goal;
+
+    @Size(max = 255)
+    private String idealEvening;
+
     @Size(max = 2000, message = "{validation.preferences.size}")
     private String preferences;
 }

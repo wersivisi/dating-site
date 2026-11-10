@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-//local stored avatars through avatars/***
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
@@ -15,10 +14,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/avatars/**")
-                .addResourceLocations("file:" + normalizeDir(avatarDir));
+                .addResourceLocations(normalizeDir(avatarDir));
     }
 
     private String normalizeDir(String dir) {
-        return dir.endsWith("/") ? dir : dir + "/";
+        String uri = java.nio.file.Path.of(dir).toAbsolutePath().normalize().toUri().toString();
+        return uri.endsWith("/") ? uri : uri + "/";
     }
 }

@@ -8,9 +8,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-/**
- * Public profile data (handle, display name, bio, preferences, avatar)
- */
 @Entity
 @Table(name = "profiles")
 @Getter
@@ -34,6 +31,24 @@ public class Profile {
 
     @Column(columnDefinition = "text")
     private String bio;
+
+    @Column(name = "birthdate")
+    private java.time.LocalDate birthdate;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name = "interests")
+    private String interests;
+
+    @Column(name = "goal")
+    private String goal;
+
+    @Column(name = "ideal_evening")
+    private String idealEvening;
 
     @Column(columnDefinition = "text")
     private String preferences;

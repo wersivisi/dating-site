@@ -18,9 +18,6 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * Minimal, session-based auth endpoints
- */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -39,6 +36,7 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
         Authentication authResult = authenticationManager.authenticate(authRequest);
 
+        if (httpRequest.getSession(false) != null) httpRequest.changeSessionId();
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authResult);
         SecurityContextHolder.setContext(context);

@@ -48,4 +48,15 @@ public class UserService {
                 .map(userMapper::toResponse)
                 .collect(Collectors.toList());
     }
+    public com.wersiv.datingsite.backend.user.dto.SettingsRequest getSettings(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        var settings = new com.wersiv.datingsite.backend.user.dto.SettingsRequest();
+        org.springframework.beans.BeanUtils.copyProperties(user, settings);
+        return settings;
+    }
+
+    public void updateSettings(Long userId, com.wersiv.datingsite.backend.user.dto.SettingsRequest settings) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        org.springframework.beans.BeanUtils.copyProperties(settings, user);
+    }
 }

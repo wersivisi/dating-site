@@ -11,11 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * "Friends" access control for messaging. Two accepted users can message freely;
- * a first message to a stranger creates a PENDING relationship that the recipient
- * must accept or block.
- */
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -24,6 +19,7 @@ public class FriendshipService {
     private final FriendshipRepository friendshipRepository;
 
     public Friendship authorizeMessage(Long senderId, Long receiverId) {
+        rejectSelf(senderId, receiverId);
         Friendship friendship = friendshipRepository.findBetween(senderId, receiverId).orElse(null);
 
         if (friendship == null) {
@@ -35,6 +31,10 @@ public class FriendshipService {
             throw new CannotMessageException("error.friend.blocked");
         }
 
+        if (friendship.getStatus() == FriendshipStatus.PENDING
+                && friendship.getRequesterId().equals(senderId)) {
+            throw new CannotMessageException("error.friend.awaiting_acceptance");
+        }
         if (friendship.getStatus() == FriendshipStatus.PENDING
                 && friendship.getAddresseeId().equals(senderId)) {
 
@@ -53,7 +53,11 @@ public class FriendshipService {
     }
 
     public Friendship accept(Long currentUserId, Long otherUserId) {
+        rejectSelf(currentUserId, otherUserId);
         Friendship friendship = requireBetween(currentUserId, otherUserId);
+        if (friendship.getStatus() == FriendshipStatus.BLOCKED) {
+            throw new CannotMessageException("error.friend.blocked");
+        }
         if (!friendship.getAddresseeId().equals(currentUserId)) {
             throw new CannotMessageException("error.friend.only_addressee_can_accept");
         }
@@ -62,14 +66,19 @@ public class FriendshipService {
     }
 
     public Friendship block(Long currentUserId, Long otherUserId) {
+        rejectSelf(currentUserId, otherUserId);
         Friendship friendship = friendshipRepository.findBetween(currentUserId, otherUserId)
                 .orElseGet(() -> new Friendship(currentUserId, otherUserId, FriendshipStatus.PENDING));
+        if (friendship.getStatus() == FriendshipStatus.BLOCKED && !currentUserId.equals(friendship.getBlockedBy())) {
+            throw new CannotMessageException("error.friend.blocked");
+        }
         friendship.setStatus(FriendshipStatus.BLOCKED);
         friendship.setBlockedBy(currentUserId);
         return friendshipRepository.save(friendship);
     }
 
     public Friendship unblock(Long currentUserId, Long otherUserId) {
+        rejectSelf(currentUserId, otherUserId);
         Friendship friendship = requireBetween(currentUserId, otherUserId);
         if (friendship.getStatus() != FriendshipStatus.BLOCKED
                 || !currentUserId.equals(friendship.getBlockedBy())) {
@@ -78,6 +87,26 @@ public class FriendshipService {
         friendship.setStatus(FriendshipStatus.PENDING);
         friendship.setBlockedBy(null);
         return friendship;
+    }
+
+    public List<Friendship> getRelationships(Long userId) {
+        return friendshipRepository.findByRequesterIdOrAddresseeId(userId, userId);
+    }
+
+    public Friendship like(Long userId, Long otherId) {
+        rejectSelf(userId, otherId);
+        Friendship existing = friendshipRepository.findBetween(userId, otherId).orElse(null);
+        if (existing != null && existing.getStatus() != FriendshipStatus.BLOCKED
+                && existing.getRequesterId().equals(userId)) {
+            return existing;
+        }
+        return authorizeMessage(userId, otherId);
+    }
+
+    private void rejectSelf(Long userId, Long otherId) {
+        if (userId.equals(otherId)) {
+            throw new CannotMessageException("error.friend.self_interaction");
+        }
     }
 
     private Friendship requireBetween(Long userA, Long userB) {

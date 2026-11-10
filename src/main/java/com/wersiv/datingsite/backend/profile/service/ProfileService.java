@@ -51,6 +51,7 @@ public class ProfileService {
 
         Profile profile = new Profile(user, request.getHandle(), request.getDisplayName(),
                 request.getBio(), request.getPreferences());
+        copyDetails(profile, request.getBirthdate(), request.getCity(), request.getGender(), request.getInterests(), request.getGoal(), request.getIdealEvening());
         Profile saved = profileRepository.save(profile);
 
         return toResponse(saved);
@@ -75,6 +76,7 @@ public class ProfileService {
         profile.setDisplayName(request.getDisplayName());
         profile.setBio(request.getBio());
         profile.setPreferences(request.getPreferences());
+        copyDetails(profile, request.getBirthdate(), request.getCity(), request.getGender(), request.getInterests(), request.getGoal(), request.getIdealEvening());
 
         return toResponse(profile);
     }
@@ -84,7 +86,7 @@ public class ProfileService {
                 .orElseThrow(() -> new ProfileNotFoundException(String.valueOf(userId)));
 
         try {
-            Path dir = Path.of(avatarDir);
+            Path dir = Path.of(avatarDir).toAbsolutePath().normalize();
             Files.createDirectories(dir);
 
             String extension = extractExtension(file.getOriginalFilename());
@@ -98,6 +100,27 @@ public class ProfileService {
         }
 
         return toResponse(profile);
+    }
+
+    private void copyDetails(Profile profile, java.time.LocalDate birthdate, String city, String gender,
+                             String interests, String goal, String idealEvening) {
+        profile.setBirthdate(birthdate);
+        profile.setCity(city);
+        profile.setGender(gender);
+        profile.setInterests(interests);
+        profile.setGoal(goal);
+        profile.setIdealEvening(idealEvening);
+    }
+
+    public java.util.List<ProfileResponse> discover(Long userId, String query, String city, String goal) {
+        String search = query.toLowerCase(java.util.Locale.ROOT).trim();
+        return profileRepository.findAll().stream()
+                .filter(p -> !p.getUserId().equals(userId) && !p.getUser().isPaused())
+                .filter(p -> city.isBlank() || city.equals(p.getCity()))
+                .filter(p -> goal.isBlank() || goal.equals(p.getGoal()))
+                .filter(p -> (p.getDisplayName() + " " + p.getHandle() + " " + p.getCity() + " " + p.getInterests())
+                        .toLowerCase(java.util.Locale.ROOT).contains(search))
+                .map(this::toResponse).toList();
     }
 
     private String extractExtension(String originalFilename) {
@@ -115,6 +138,12 @@ public class ProfileService {
                 .displayName(profile.getDisplayName())
                 .bio(profile.getBio())
                 .preferences(profile.getPreferences())
+                .birthdate(profile.getBirthdate())
+                .city(profile.getCity())
+                .gender(profile.getGender())
+                .interests(profile.getInterests())
+                .goal(profile.getGoal())
+                .idealEvening(profile.getIdealEvening())
                 .avatarUrl(avatarUrl)
                 .build();
     }

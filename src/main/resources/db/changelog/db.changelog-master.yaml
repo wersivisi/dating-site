@@ -7,3 +7,7 @@ databaseChangeLog:
       file: db/changelog/tables/v3_create_friendships.yaml
   - include:
       file: db/changelog/tables/v4_create_messages.yaml
+  - include:
+      file: db/changelog/tables/v5_profile_details.yaml
+  - include:
+      file: db/changelog/tables/v6_user_settings.yaml

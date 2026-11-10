@@ -42,6 +42,24 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "match_notifications", nullable = false)
+    private boolean matchNotifications = true;
+
+    @Column(name = "message_notifications", nullable = false)
+    private boolean messageNotifications = true;
+
+    @Column(name = "email_news", nullable = false)
+    private boolean emailNews = false;
+
+    @Column(name = "show_online", nullable = false)
+    private boolean showOnline = true;
+
+    @Column(name = "show_distance", nullable = false)
+    private boolean showDistance = true;
+
+    @Column(name = "paused", nullable = false)
+    private boolean paused = false;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
