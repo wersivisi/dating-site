@@ -1,1 +1,151 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Сообщения — swipely</title><link rel="stylesheet" href="styles.css"></head><body><header class="header"><div class="header-inner"><a class="brand" href="index.html"><span class="brand-mark">♡</span>swipely</a><nav class="app-nav"><a href="discover.html">Анкеты</a><a href="likes.html">Симпатии <span>12</span></a><a class="active" href="messages.html">Сообщения <span>3</span></a></nav><a class="user-nav" href="my-profile.html"><span class="avatar">Т</span>Мой профиль⌄</a></div></header><main class="app-main container"><div class="heading"><p class="eyebrow">✦ СООБЩЕНИЯ</p><h1>ЕСТЬ О ЧЁМ ПОГОВОРИТЬ.</h1></div><div class="messages-layout"><aside class="conversation-list"><label class="field">Найти диалог<input class="input" type="search" placeholder="Поиск по имени"></label><nav class="tabs" style="margin-top:18px"><a class="active" href="messages.html">Все · 5</a><a href="messages.html">Непрочитанные · 2</a></nav><a class="conversation" href="conversation.html"><span class="avatar">М</span><span><strong>Маша</strong><small>Как насчёт прогуляться в выходные?</small></span></a><a class="conversation" href="conversation.html"><span class="avatar">А</span><span><strong>Артём</strong><small>Тоже обожаю этот фильм!</small></span></a><a class="conversation" href="conversation.html"><span class="avatar">Л</span><span><strong>Лена</strong><small>Спасибо за рекомендацию</small></span></a><a class="conversation" href="conversation.html"><span class="avatar">С</span><span><strong>Саша</strong><small>Договорились, до встречи!</small></span></a><a class="conversation" href="conversation.html"><span class="avatar">Н</span><span><strong>Ника</strong><small>Это моё любимое место</small></span></a></aside><section class="chat" style="justify-content:center;align-items:center;text-align:center"><span class="brand-mark" style="font-size:40px">▱</span><h2 class="display" style="font-size:34px">ТВОЯ ИСТОРИЯ — В ДИАЛОГЕ.</h2><p style="max-width:480px;color:var(--muted)">Выбери переписку слева или начни разговор с человеком, с которым у вас взаимная симпатия.</p><a class="button outline" href="likes.html">К взаимным симпатиям</a><div class="banner" style="margin-top:25px;text-align:left"><span class="banner-icon">♧</span><div><strong>Общайся бережно</strong><p>Ты можешь закончить разговор в любой момент. Блокировка и жалоба доступны в меню диалога.</p></div></div></section></div></main><footer class="footer"><div class="footer-inner"><span>© 2026 swipely　 18+ · Только для совершеннолетних</span><div class="footer-links"><a href="safety.html">Безопасность</a><a href="help.html">Помощь</a></div></div></footer></body></html>
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Сообщения — swipely</title>
+  <!-- Подключение таблицы стилей -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ШАПКА САЙТА / НАВИГАЦИЯ -->
+  <header class="header">
+    <div class="header-inner">
+      <!-- Навигация: Главная страница -->
+      <a class="brand" href="index.html">
+        <span class="brand-mark">♡</span>swipely
+      </a>
+      
+      <nav class="app-nav">
+        <!-- Навигация: Страница поиска / просмотра анкет -->
+        <a href="discover.html">Анкеты</a>
+        <!-- Навигация: Страница симпатий с счетчиком -->
+        <a href="likes.html">Симпатии <span>12</span></a>
+        <!-- Навигация: Страница сообщений с счетчиком непрочитанных (активная вкладка) -->
+        <a class="active" href="messages.html">Сообщения <span>3</span></a>
+      </nav>
+      
+      <!-- Навигация: Меню личного профиля -->
+      <a class="user-nav" href="my-profile.html">
+        <span class="avatar">Т</span>Мой профиль⌄
+      </a>
+    </div>
+  </header>
+
+  <!-- ОСНОВНОЙ КОНТЕНТ СТРАНИЦЫ -->
+  <main class="app-main container">
+    
+    <!-- Заголовок раздела -->
+    <div class="heading">
+      <p class="eyebrow">✦ СООБЩЕНИЯ</p>
+      <h1>ЕСТЬ О ЧЁМ ПОГОВОРИТЬ.</h1>
+    </div>
+
+    <!-- ДВУХКОЛОНОЧНЫЙ МАКЕТ ЧАТА -->
+    <div class="messages-layout">
+      
+      <!-- ЛЕВАЯ КОЛОНКА: СПИСОК ДИАЛОГОВ -->
+      <aside class="conversation-list">
+        
+        <!-- Поле поиска по списку чатов -->
+        <label class="field">
+          Найти диалог
+          <input class="input" type="search" placeholder="Поиск по имени">
+        </label>
+        
+        <!-- Вкладки фильтрации сообщений -->
+        <nav class="tabs" style="margin-top:18px">
+          <!-- Вкладка: Все диалоги (активная) -->
+          <a class="active" href="messages.html">Все · 5</a>
+          <!-- Вкладка: Непрочитанные диалоги -->
+          <a href="messages.html">Непрочитанные · 2</a>
+        </nav>
+
+        <!-- Список элементов чата -->
+        <!-- Ссылка на диалог с пользователем «Маша» -->
+        <a class="conversation" href="conversation.html">
+          <span class="avatar">М</span>
+          <span>
+            <strong>Маша</strong>
+            <small>Как насчёт прогуляться в выходные?</small>
+          </span>
+        </a>
+
+        <!-- Ссылка на диалог с пользователем «Артём» -->
+        <a class="conversation" href="conversation.html">
+          <span class="avatar">А</span>
+          <span>
+            <strong>Артём</strong>
+            <small>Тоже обожаю этот фильм!</small>
+          </span>
+        </a>
+
+        <!-- Ссылка на диалог с пользователем «Лена» -->
+        <a class="conversation" href="conversation.html">
+          <span class="avatar">Л</span>
+          <span>
+            <strong>Лена</strong>
+            <small>Спасибо за рекомендацию</small>
+          </span>
+        </a>
+
+        <!-- Ссылка на диалог с пользователем «Саша» -->
+        <a class="conversation" href="conversation.html">
+          <span class="avatar">С</span>
+          <span>
+            <strong>Саша</strong>
+            <small>Договорились, до встречи!</small>
+          </span>
+        </a>
+
+        <!-- Ссылка на диалог с пользователем «Ника» -->
+        <a class="conversation" href="conversation.html">
+          <span class="avatar">Н</span>
+          <span>
+            <strong>Ника</strong>
+            <small>Это моё любимое место</small>
+          </span>
+        </a>
+      </aside>
+
+      <!-- ПРАВАЯ КОЛОНКА: ПУСТОЕ СОСТОЯНИЕ (ДИАЛОГ НЕ ВЫБРАН) -->
+      <section class="chat" style="justify-content:center;align-items:center;text-align:center">
+        <span class="brand-mark" style="font-size:40px">▱</span>
+        <h2 class="display" style="font-size:34px">ТВОЯ ИСТОРИЯ — В ДИАЛОГЕ.</h2>
+        <p style="max-width:480px;color:var(--muted)">
+          Выбери переписку слева или начни разговор с человеком, с которым у вас взаимная симпатия.
+        </p>
+        
+        <!-- Ссылка для перехода к взаимным симпатиям -->
+        <a class="button outline" href="likes.html">К взаимным симпатиям</a>
+        
+        <!-- Баннер с напоминанием о безопасности -->
+        <div class="banner" style="margin-top:25px;text-align:left">
+          <span class="banner-icon">♧</span>
+          <div>
+            <strong>Общайся бережно</strong>
+            <p>Ты можешь закончить разговор в любой момент. Блокировка и жалоба доступны в меню диалога.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- ПОДВАЛ СТРАНИЦЫ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>© 2026 swipely  18+ · Только для совершеннолетних</span>
+      <div class="footer-links">
+        <!-- Ссылка: Раздел безопасности -->
+        <a href="safety.html">Безопасность</a>
+        <!-- Ссылка: Центр помощи -->
+        <a href="help.html">Помощь</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
