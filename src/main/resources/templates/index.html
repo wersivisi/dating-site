@@ -1,271 +1,292 @@
 <!doctype html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
-
-  <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>swipely — Твой человек. Твой вайб.</title>
-    <link href="/css/styles.css" rel="stylesheet" th:href="@{/css/styles.css}"/>
-    <script defer="" th:src="@{/js/site.js}"></script>
-  </head>
+    <!-- Правильное подключение стилей и скриптов через Thymeleaf -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script defer th:src="@{/js/site.js}"></script>
+</head>
+<body>
 
-  <body>
+<!-- Шапка сайта (Header) -->
+<header class="header">
+    <div class="header-inner">
+        <a class="brand" th:href="@{/}"><span class="brand-mark">♡</span>swipely</a>
 
-    <header class="header">
-      <div class="header-inner">
-        <a class="brand" href="/" th:href="@{/}"><span class="brand-mark">♡</span>swipely</a>
         <nav class="nav">
-          <a href="#people">Люди</a>
-          <a href="#steps">Как это работает</a>
-          <a href="/safety" th:href="@{/safety}">Безопасность</a>
+            <a href="#people">Люди</a>
+            <a href="#steps">Как это работает</a>
+            <a th:href="@{/safety}">Безопасность</a>
         </nav>
+
+        <!-- Логика отображения кнопок в зависимости от авторизации -->
         <div class="header-actions" th:unless="${signedIn}">
-          <a href="/login" th:href="@{/login}">Войти</a>
-          <a class="button small" href="/register" th:href="@{/register}">Регистрация</a>
+            <a th:href="@{/login}">Войти</a>
+            <a class="button small" th:href="@{/register}">Регистрация</a>
         </div>
         <div class="header-actions" th:if="${signedIn}">
-          <a class="button small" th:href="@{/my-profile}">Мой профиль</a>
-          <a th:href="@{/messages}">Сообщения</a>
+            <a class="button small" th:href="@{/my-profile}">Мой профиль</a>
+            <a th:href="@{/messages}">Сообщения</a>
         </div>
-      </div>
-    </header>
+    </div>
+</header>
 
-    <main>
-      <p class="notice" role="alert" th:if="${error}" th:text="${error}"></p>
-      <p class="notice" role="status" th:if="${notice}" th:text="${notice}"></p>
-
-      <section class="hero container">
+<main>
+    <!-- Главная промо-секция (Hero section) -->
+    <section class="hero container">
         <div class="hero-copy">
-          <p class="eyebrow">✦ НЕ ПРИТВОРЯЙСЯ. ЗНАКОМЬСЯ.</p>
-          <h1>ТВОЙ<br/>ЧЕЛОВЕК.<br/><span>ТВОЙ ВАЙБ.</span></h1>
-          <p>Находи людей, с которыми есть что обсудить и чем поделиться.</p>
-          <div class="actions">
-            <a class="button" href="/login" th:href="${signedIn} ? @{/discover} : @{/login}">Начать знакомства ↗</a>
-            <a class="button outline" href="#steps">Как это работает</a>
-          </div>
-          <small>Без идеальных анкет. Без чужих ожиданий. 18+</small>
+            <p class="eyebrow">✦ НЕ ПРИТВОРЯЙСЯ. ЗНАКОМЬСЯ.</p>
+            <h1>ТВОЙ<br>ЧЕЛОВЕК.<br><span>ТВОЙ ВАЙБ.</span></h1>
+            <p>Находи людей, с которыми есть что обсудить и чем поделиться.</p>
+
+            <div class="actions">
+                <a class="button" th:href="${signedIn} ? @{/discover} : @{/login}">Начать знакомства ↗</a>
+                <a class="button outline" href="#steps">Как это работает</a>
+            </div>
+
+            <small>Без идеальных анкет. Без чужих ожиданий. 18+</small>
         </div>
+
         <div class="hero-art">
-          <span class="orbit">✦</span>
-          <div class="hero-photo">
-            <img alt="Портрет участницы" src="https://images.pexels.com/photos/14389701/pexels-photo-14389701.jpeg"/>
-            <div class="hero-caption">
-              <span><strong>Пудж Идеал</strong><small>Москва · 24</small></span>
-              <span class="online">● Сейчас в сети</span>
+            <span class="orbit">✦</span>
+            <div class="hero-photo">
+                <!-- Путь к картинке теперь правильный: /images/... -->
+                <img th:src="@{/images/portrait.jpg}" alt="Портрет">
+                <div class="hero-caption">
+                    <span><strong>Пудж Идеал</strong><small>Москва · 24</small></span>
+                    <span class="online">● Сейчас в сети</span>
+                </div>
             </div>
-          </div>
-          <p class="hero-note">НЕ ИДЕАЛЬНЫЕ. НАСТОЯЩИЕ.</p>
+            <p class="hero-note">НЕ ИДЕАЛЬНЫЕ. НАСТОЯЩИЕ.</p>
         </div>
-      </section>
+    </section>
 
-      <div class="ticker">
-        <span>МУЗЫКА</span>
-        <b>✦</b>
-        <span>КИНО</span>
-        <b>✦</b>
-        <span>НОВЫЕ МЕСТА</span>
-        <b>✦</b>
+    <!-- Бегущая строка / Теги интересов -->
+    <div class="ticker">
+        <span>МУЗЫКА</span><b>✦</b>
+        <span>КИНО</span><b>✦</b>
+        <span>НОВЫЕ МЕСТА</span><b>✦</b>
         <span>ПУТЕШЕСТВИЯ</span>
-      </div>
+    </div>
 
-      <section class="section container" id="people">
+    <!-- Секция: Список пользователей / Анкеты -->
+    <section class="section container" id="people">
         <div class="section-intro">
-          <div>
-            <p class="eyebrow">✦ ОБЩЕЕ. С ЧЕГО ВСЁ И ПРОЩЕ.</p>
-            <h2>ЕСТЬ ОБЩЕЕ?<br/>ЕСТЬ КОНТАКТ.</h2>
-          </div>
-          <p>Отметь то, что тебе нравится. Иногда одна любимая книга или новый маршрут — уже повод начать разговор.</p>
-        </div>
-        <div class="profile-grid">
-          <article class="person-card">
-            <a class="person-photo" href="/login" th:href="${signedIn} ? @{/discover} : @{/login}">
-              <img alt="Портрет" src="https://images.pexels.com/photos/14389701/pexels-photo-14389701.jpeg"/>
-              <span class="match">✦ Игры</span>
-            </a>
-            <div class="person-info">
-              <span class="city">Москва</span>
-              <h3>Снайпер Дед, 27</h3>
-              <p>Крыши · Спать · Сидеть в таверне</p>
-              <div class="chips">
-                <span>Игры</span>
-                <span>Кино</span>
-                <span>Кофе</span>
-              </div>
-              <a aria-label="Посмотреть анкеты" class="like" href="/login" th:href="${signedIn} ? @{/discover} : @{/login}">♡</a>
+            <div>
+                <p class="eyebrow">✦ ОБЩЕЕ. С ЧЕГО ВСЁ И ПРОЩЕ.</p>
+                <h2>ЕСТЬ ОБЩЕЕ?<br>ЕСТЬ КОНТАКТ.</h2>
             </div>
-          </article>
-          <article class="person-card">
-            <a class="person-photo" href="/login" th:href="${signedIn} ? @{/discover} : @{/login}">
-              <img alt="Портрет" src="https://images.pexels.com/photos/7316574/pexels-photo-7316574.jpeg"/>
-              <span class="match">✦ Музыка</span>
-            </a>
-            <div class="person-info">
-              <span class="city">Санкт-Петербург</span>
-              <h3>Бристлбек Ёж, 25</h3>
-              <p>Бумеранги · Плеваться · Шипеть</p>
-              <div class="chips">
-                <span>Музыка</span>
-                <span>Прогулки</span>
-                <span>Книги</span>
-              </div>
-              <a aria-label="Посмотреть анкеты" class="like" href="/login" th:href="${signedIn} ? @{/discover} : @{/login}">♡</a>
-            </div>
-          </article>
-          <article class="person-card">
-            <a class="person-photo" href="/login" th:href="${signedIn} ? @{/discover} : @{/login}">
-              <img alt="Портрет" src="https://images.pexels.com/photos/13112405/pexels-photo-13112405.jpeg"/>
-              <span class="match">✦ Путешествия</span>
-            </a>
-            <div class="person-info">
-              <span class="city">Москва</span>
-              <h3>Вич Доктор УГА-БУГА, 29</h3>
-              <p>Варды · Лечить · ТОТЕМ УГА-БУГА</p>
-              <div class="chips">
-                <span>Места</span>
-                <span>Игры</span>
-                <span>Музыка</span>
-              </div>
-              <a aria-label="Посмотреть анкеты" class="like" href="/login" th:href="${signedIn} ? @{/discover} : @{/login}">♡</a>
-            </div>
-          </article>
+            <p>Отметь то, что тебе нравится. Иногда одна любимая книга или новый маршрут — уже повод начать разговор.</p>
         </div>
-        <div class="section-foot">
-          <small>Демонстрационные профили совершеннолетних людей</small>
-          <a class="button" href="/login" id="find-match" th:href="${signedIn} ? @{/discover} : @{/login}">Найти свою симпатию ↗</a>
-        </div>
-      </section>
 
-      <section class="section steps container" id="steps">
+        <div class="profile-grid">
+            <!-- Карточка 1: Снайпер Дед -->
+            <article class="person-card">
+                <a class="person-photo" th:href="${signedIn} ? @{/discover} : @{/login}">
+                    <img th:src="@{/images/photo_3_2026-11-18_23-37-57.jpg}" alt="Портрет">
+                    <span class="match">✦ Охота</span>
+                </a>
+                <div class="person-info">
+                    <span class="city">Москва</span>
+                    <h3>Снайпер Дед, 79</h3>
+                    <p>Крыши · Спать · Сидеть в таверне</p>
+                    <div class="chips">
+                        <span>Игры</span>
+                        <span>Охота</span>
+                        <span>ШРАПНЕЛЬ</span>
+                    </div>
+                    <a class="like" th:href="${signedIn} ? @{/discover} : @{/login}" aria-label="Поставить симпатию">♡</a>
+                </div>
+            </article>
+
+            <!-- Карточка 2: Бристлбек Ёж -->
+            <article class="person-card">
+                <a class="person-photo" th:href="${signedIn} ? @{/discover} : @{/login}">
+                    <img th:src="@{/images/photo_2_2026-11-18_23-37-57.jpg}" alt="Портрет">
+                    <span class="match">✦ Руина</span>
+                </a>
+                <div class="person-info">
+                    <span class="city">Санкт-Петербург</span>
+                    <h3>Бристлбек Ёж, 25</h3>
+                    <p>Бумеранги · Плеваться · Шипеть</p>
+                    <div class="chips">
+                        <span>Чихать</span>
+                        <span>Денаить</span>
+                        <span>Фидить</span>
+                    </div>
+                    <a class="like" th:href="${signedIn} ? @{/discover} : @{/login}" aria-label="Поставить симпатию">♡</a>
+                </div>
+            </article>
+
+            <!-- Карточка 3: Вич Доктор -->
+            <article class="person-card">
+                <a class="person-photo" th:href="${signedIn} ? @{/discover} : @{/login}">
+                    <img th:src="@{/images/photo_1_2026-11-18_23-37-57.jpg}" alt="Портрет">
+                    <span class="match">✦ Лечить</span>
+                </a>
+                <div class="person-info">
+                    <span class="city">Москва</span>
+                    <h3>Вич Доктор УГА-БУГА, 109</h3>
+                    <p>Варды · Лечить · ТОТЕМ УГА-БУГА</p>
+                    <div class="chips">
+                        <span>Вардить</span>
+                        <span>КрипСтилить</span>
+                        <span>Кидать Каску</span>
+                    </div>
+                    <a class="like" th:href="${signedIn} ? @{/discover} : @{/login}" aria-label="Поставить симпатию">♡</a>
+                </div>
+            </article>
+        </div>
+
+        <div class="section-foot">
+            <small>Демонстрационные профили совершеннолетних людей</small>
+            <a class="button" th:href="${signedIn} ? @{/discover} : @{/login}">Найти свою симпатию ↗</a>
+        </div>
+    </section>
+
+    <!-- Секция: Пошаговая инструкция -->
+    <section class="section steps container" id="steps">
         <p class="eyebrow">✦ ОТ СИМПАТИИ К РАЗГОВОРУ</p>
         <div class="section-intro">
-          <h2>ВСЕГО ТРИ ШАГА.<br/>ДАЛЬШЕ — КАК ПОЧУВСТВУЕШЬ.</h2>
-          <p>Не нужно придумывать идеальный сценарий. Достаточно быть собой.</p>
+            <h2>ВСЕГО ТРИ ШАГА.<br>ДАЛЬШЕ — КАК ПОЧУВСТВУЕШЬ.</h2>
+            <p>Не нужно придумывать идеальный сценарий. Достаточно быть собой.</p>
         </div>
-        <div class="three-grid">
-          <article>
-            <span class="step-num">01</span>
-            <h3>Расскажи о себе</h3>
-            <p>Добавь фото, пару слов о себе и то, что любишь.</p>
-          </article>
-          <article>
-            <span class="step-num">02</span>
-            <h3>Найди свой интерес</h3>
-            <p>Знакомься с анкетами и отмечай тех, кто тебе близок.</p>
-          </article>
-          <article>
-            <span class="step-num">03</span>
-            <h3>Начни разговор</h3>
-            <p>Напиши первое «привет» и решите, куда приведёт ваш общий интерес.</p>
-          </article>
-        </div>
-      </section>
 
-      <section class="safety-band container">
+        <div class="three-grid">
+            <article>
+                <span class="step-num">01</span>
+                <h3>Расскажи о себе</h3>
+                <p>Добавь фото, пару слов о себе и то, что любишь.</p>
+            </article>
+            <article>
+                <span class="step-num">02</span>
+                <h3>Найди свой интерес</h3>
+                <p>Знакомься с анкетами и отмечай тех, кто тебе близок.</p>
+            </article>
+            <article>
+                <span class="step-num">03</span>
+                <h3>Начни разговор</h3>
+                <p>Напиши первое «привет» и решите, куда приведёт ваш общий интерес.</p>
+            </article>
+        </div>
+    </section>
+
+    <!-- Секция: Безопасность -->
+    <section class="safety-band container">
         <div class="safety-lead">
-          <span class="brand-mark">♧</span>
-          <h2>БЫТЬ СОБОЙ.<br/>ЧУВСТВОВАТЬ СЕБЯ<br/>СПОКОЙНО.</h2>
-          <a href="/safety" th:href="@{/safety}">Правила безопасных знакомств ↗</a>
-        </div>
-        <div class="safety-points">
-          <article>
-            <span class="brand-mark">♡</span>
-            <div>
-              <strong>Взаимность прежде всего</strong>
-              <p>Переписка начинается с взаимной симпатии.</p>
-            </div>
-          </article>
-          <article>
             <span class="brand-mark">♧</span>
-            <div>
-              <strong>Личные границы — это важно</strong>
-              <p>Можно прекратить диалог или отправить жалобу.</p>
-            </div>
-          </article>
-          <article>
-            <span class="brand-mark">✦</span>
-            <div>
-              <strong>Уважение без исключений</strong>
-              <p>Оскорблениям и давлению здесь не место.</p>
-            </div>
-          </article>
+            <h2>БЫТЬ СОБОЙ.<br>ЧУВСТВОВАТЬ СЕБЯ<br>СПОКОЙНО.</h2>
+            <a th:href="@{/safety}">Правила безопасных знакомств ↗</a>
         </div>
-      </section>
 
-      <section class="section container">
+        <div class="safety-points">
+            <article>
+                <span class="brand-mark">♡</span>
+                <div>
+                    <strong>Взаимность прежде всего</strong>
+                    <p>Переписка начинается с взаимной симпатии.</p>
+                </div>
+            </article>
+            <article>
+                <span class="brand-mark">♧</span>
+                <div>
+                    <strong>Личные границы — это важно</strong>
+                    <p>Можно прекратить диалог или отправить жалобу.</p>
+                </div>
+            </article>
+            <article>
+                <span class="brand-mark">✦</span>
+                <div>
+                    <strong>Уважение без исключений</strong>
+                    <p>Оскорблениям и давлению здесь не место.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Секция: Преимущества и ценности -->
+    <section class="section container">
         <div class="section-intro">
-          <h2>МЕНЬШЕ ОЖИДАНИЙ.<br/>БОЛЬШЕ НАСТОЯЩЕГО.</h2>
-          <p class="eyebrow">✦ ЗНАКОМСТВА ПО-ТВОЕМУ</p>
+            <h2>МЕНЬШЕ ОЖИДАНИЙ.<br>БОЛЬШЕ НАСТОЯЩЕГО.</h2>
+            <p class="eyebrow">✦ ЗНАКОМСТВА ПО-ТВОЕМУ</p>
         </div>
+
         <div class="three-grid">
-          <article>
-            <span class="step-num">✦</span>
-            <h3>Близкие по интересам</h3>
-            <p>Любимый фильм или маршрут на выходные — уже повод заговорить.</p>
-          </article>
-          <article>
-            <span class="step-num">☷</span>
-            <h3>В твоём ритме</h3>
-            <p>Выбирай, с кем общаться и когда сделать следующий шаг.</p>
-          </article>
-          <article>
-            <span class="step-num">♡</span>
-            <h3>Без чужих сценариев</h3>
-            <p>Дружба или что-то большее — говори о том, что важно тебе.</p>
-          </article>
+            <article>
+                <span class="step-num">✦</span>
+                <h3>Близкие по интересам</h3>
+                <p>Любимый фильм или маршрут на выходные — уже повод заговорить.</p>
+            </article>
+            <article>
+                <span class="step-num">☷</span>
+                <h3>В твоём ритме</h3>
+                <p>Выбирай, с кем общаться и когда сделать следующий шаг.</p>
+            </article>
+            <article>
+                <span class="step-num">♡</span>
+                <h3>Без чужих сценариев</h3>
+                <p>Дружба или что-то большее — говори о том, что важно тебе.</p>
+            </article>
         </div>
-      </section>
+    </section>
 
-      <section class="faq container">
+    <!-- Секция: FAQ (Вопросы и ответы) -->
+    <section class="faq container">
         <div>
-          <p class="eyebrow">✦ НА ВСЯКИЙ СЛУЧАЙ</p>
-          <h2>ЕСТЬ<br/>ВОПРОСЫ?</h2>
-          <p>Всё важное перед первым «привет».</p>
-          <a class="text-link" href="/help" th:href="@{/help}">Центр помощи ↗</a>
+            <p class="eyebrow">✦ НА ВСЯКИЙ СЛУЧАЙ</p>
+            <h2>ЕСТЬ<br>ВОПРОСЫ?</h2>
+            <p>Всё важное перед первым «привет».</p>
+            <a class="text-link" th:href="@{/help}">Центр помощи ↗</a>
         </div>
-        <div>
-          <details open="">
-            <summary>Как начать знакомство?<span>+</span></summary>
-            <p>Создай профиль, добавь фотографии и интересы. Если симпатия взаимна, можно начать переписку.</p>
-          </details>
-          <details>
-            <summary>Кто может пользоваться swipely?<span>+</span></summary>
-            <p>Только совершеннолетние — люди от 18 лет.</p>
-          </details>
-          <details>
-            <summary>Кто может написать первым?<span>+</span></summary>
-            <p>Любой из вас, когда симпатия взаимна.</p>
-          </details>
-          <details>
-            <summary>Что делать, если общение неприятно?<span>+</span></summary>
-            <p>Ты можешь закончить разговор, заблокировать пользователя или отправить жалобу.</p>
-          </details>
-        </div>
-      </section>
 
-      <section class="cta">
+        <div>
+            <details open>
+                <summary>Как начать знакомство?<span>+</span></summary>
+                <p>Создай профиль, добавь фотографии и интересы. Если симпатия взаимна, можно начать переписку.</p>
+            </details>
+            <details>
+                <summary>Кто может пользоваться swipely?<span>+</span></summary>
+                <p>Только совершеннолетние — люди от 18 лет.</p>
+            </details>
+            <details>
+                <summary>Кто может написать первым?<span>+</span></summary>
+                <p>Любой из вас, когда симпатия взаимна.</p>
+            </details>
+            <details>
+                <summary>Что делать, если общение неприятно?<span>+</span></summary>
+                <p>Ты можешь закончить разговор, заблокировать пользователя или отправить жалобу.</p>
+            </details>
+        </div>
+    </section>
+
+    <!-- Секция: Призыв к действию (CTA) -->
+    <section class="cta">
         <div class="container">
-          <p class="eyebrow">✦ ВСЁ НАЧИНАЕТСЯ С ЛЮБОПЫТСТВА</p>
-          <h2>НУ ЧТО, СОВПАДЁМ?</h2>
-          <p>Не ищи идеальные слова. Найди того, с кем легко.</p>
-          <a class="button" href="/login" th:href="${signedIn} ? @{/discover} : @{/login}">Начать знакомства ↗</a>
-          <small>Только для тех, кому исполнилось 18 лет</small>
+            <p class="eyebrow">✦ ВСЁ НАЧИНАЕТСЯ С ЛЮБОПЫТСТВА</p>
+            <h2>НУ ЧТО, СОВПАДЁМ?</h2>
+            <p>Не ищи идеальные слова. Найди того, с кем легко.</p>
+            <a class="button" th:href="${signedIn} ? @{/discover} : @{/login}">Начать знакомства ↗</a>
+            <small>Только для тех, кому исполнилось 18 лет</small>
         </div>
-      </section>
+    </section>
 
-    </main>
+</main>
 
-    <footer class="footer">
-      <div class="footer-inner">
+<!-- Подвал сайта (Footer) -->
+<footer class="footer">
+    <div class="footer-inner">
         <span>© 2026 swipely 18+ · Только для совершеннолетних</span>
-        <nav aria-label="Навигация в подвале" class="footer-links">
-          <a th:href="${signedIn} ? @{/discover} : @{/login}">Найти свою симпатию</a>
-          <a href="/help" th:href="@{/help}">Помощь</a>
-          <a href="/safety" th:href="@{/safety}">Безопасность</a>
-          <a href="/privacy" th:href="@{/privacy}">Конфиденциальность</a>
-          <a href="/terms" th:href="@{/terms}">Условия использования</a>
-        </nav>
-      </div>
-    </footer>
+        <div class="footer-links">
+            <a th:href="${signedIn} ? @{/discover} : @{/login}">Найти свою симпатию</a>
+            <a th:href="@{/help}">Помощь</a>
+            <a th:href="@{/safety}">Безопасность</a>
+            <a th:href="@{/privacy}">Конфиденциальность</a>
+            <a th:href="@{/terms}">Условия использования</a>
+        </div>
+    </div>
+</footer>
 
-  </body>
+</body>
 </html>
