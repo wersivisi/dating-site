@@ -48,7 +48,7 @@ public class SecurityConfig {
                                 "/help", "/help.html", "/safety", "/safety.html", "/privacy", "/privacy.html",
                                 "/terms", "/terms.html", "/forgot-password", "/forgot-password.html",
                                 "/verify-email", "/verify-email.html", "/reset-password", "/reset-password.html",
-                                "/reset-success", "/reset-success.html").permitAll()
+                                "/reset-success", "/reset-success.html", "/images/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
