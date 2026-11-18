@@ -1,1 +1,97 @@
-<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Диалог — swipely</title><link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}"></head><body><header class="header"><div class="header-inner"><a class="brand" href="/" th:href="@{/}"><span class="brand-mark">♡</span>swipely</a><nav class="app-nav"><a href="/discover" th:href="@{/discover}">Анкеты</a><a href="/likes" th:href="@{/likes}">Симпатии</a><a class="active" href="/messages" th:href="@{/messages}">Сообщения</a></nav><a class="user-nav" href="/my-profile" th:href="@{/my-profile}"><span class="avatar">♡</span>Мой профиль⌄</a></div></header><main class="app-main container"><p class="notice" role="alert" th:if="${error}" th:text="${error}"></p><p class="notice" role="status" th:if="${notice}" th:text="${notice}"></p><p><a class="text-link" th:href="@{/messages}">← Все сообщения</a></p><div class="messages-layout"><aside class="conversation-list"><p class="notice" th:if="${#lists.isEmpty(profiles)}">Диалогов пока нет. <a th:href="@{/discover}">Найти собеседника</a></p><a class="conversation" th:each="person : ${profiles}" th:href="@{/conversation(userId=${person.userId})}"><span class="avatar">♡</span><span><strong th:text="${person.displayName}"></strong><small>Открыть диалог</small></span></a></aside><section class="chat"><div class="chat-head"><strong th:text="${recipient.displayName}"></strong><a th:href="@{/profile(userId=${recipient.userId})}">К анкете ↗</a></div><div class="chat-body"><p class="notice" th:if="${#lists.isEmpty(messages)}">Начните знакомство с первого сообщения. После него дождитесь ответа или принятия заявки.</p><p class="bubble" th:each="message : ${messages}" th:classappend="${message.senderId == currentUserId} ? 'out' : 'in'"><span style="white-space:pre-wrap" th:text="${message.content}"></span><br><small th:text="${message.sentAt}"></small></p></div><form th:if="${canSend}" class="compose" method="post" th:action="@{/conversation}"><input type="hidden" name="receiverId" th:value="${recipient.userId}"><input class="input" name="content" required maxlength="4000" placeholder="Написать сообщение..."><button class="button">Отправить ↗</button></form><p class="notice" th:unless="${canSend}">Отправка недоступна: ожидается принятие заявки или установлена блокировка.</p></section></div></main><footer class="footer"><div class="footer-inner"><span>© 2026 swipely　 18+ · Только для совершеннолетних</span><div class="footer-links"><a href="/safety" th:href="@{/safety}">Безопасность</a><a href="/help" th:href="@{/help}">Помощь</a></div></div></footer></body></html>
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>Диалог — swipely</title>
+    <link href="/css/styles.css" rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <script defer="" th:src="@{/js/messaging.js}"></script>
+    <script defer="" th:src="@{/js/site.js}"></script>
+  </head>
+
+  <body>
+
+    <header class="header">
+      <div class="header-inner">
+        <a class="brand" href="/" th:href="@{/}"><span class="brand-mark">♡</span>swipely</a>
+        <nav class="app-nav">
+          <a href="/discover" th:href="@{/discover}">Анкеты</a>
+          <a href="/likes" th:href="@{/likes}">Симпатии</a>
+          <a class="active" href="/messages" th:href="@{/messages}">Сообщения</a>
+        </nav>
+        <a class="user-nav" href="/my-profile" th:href="@{/my-profile}"><span class="avatar">♡</span>Мой профиль⌄</a>
+      </div>
+    </header>
+
+    <main class="app-main container" data-messenger="" th:data-conversation-url="@{/conversation}" th:data-current-user="${currentUserId}" th:data-inbox-url="@{/api/messages/conversations}" th:data-peer-id="${recipient.userId}" th:data-root-url="@{/}" th:data-send-url="@{/api/messages}" th:data-state-url="@{/api/messages/with/{id}/state(id=${recipient.userId})}">
+      <p class="notice" role="alert" th:if="${error}" th:text="${error}"></p>
+      <p aria-live="polite" class="sync-status" data-sync-status="" role="status">Проверяем новые сообщения…</p>
+      <div class="notice network-error" data-chat-error="" hidden="" role="alert">
+        <span data-chat-error-text=""></span>
+        <button class="button outline" data-chat-retry="" type="button">Повторить</button>
+        <a data-chat-login="" hidden="" th:href="@{/login}">Войти снова</a>
+      </div>
+      <p><a class="text-link" th:href="@{/messages}">← Все сообщения</a></p>
+      <div class="messages-layout">
+        <aside aria-label="Диалоги" class="conversation-list">
+          <label class="field" for="conversation-search">
+            Поиск диалога
+            <input autocomplete="off" class="input" data-conversation-search="" id="conversation-search" placeholder="Имя собеседника" type="search"/>
+          </label>
+          <div data-conversation-list="">
+            <a class="conversation" th:each="person : ${conversations}" th:href="@{/conversation(userId=${person.userId})}">
+              <img alt="" class="avatar" th:if="${person.avatarUrl}" th:src="@{${person.avatarUrl}}"/>
+              <span aria-hidden="true" class="avatar" th:unless="${person.avatarUrl}">♡</span>
+              <span><strong th:text="${person.displayName}"></strong><small th:text="${person.lastMessage != null ? person.lastMessage : 'Начать разговор'}"></small></span>
+            </a>
+          </div>
+          <p class="notice" data-conversations-empty="" th:hidden="${!#lists.isEmpty(conversations)}">Диалогов пока нет. <a th:href="@{/discover}">Найти собеседника</a></p>
+          <p class="notice" data-search-empty="" hidden="">Диалог не найден. Попробуйте другое имя.</p>
+        </aside>
+
+        <section aria-label="Переписка" class="chat">
+          <div class="chat-head">
+            <img alt="" class="avatar" th:if="${recipient.avatarUrl}" th:src="@{${recipient.avatarUrl}}"/>
+            <span aria-hidden="true" class="avatar" th:unless="${recipient.avatarUrl}">♡</span>
+            <div>
+              <strong data-recipient-name="" th:text="${recipient.displayName}"></strong>
+            </div>
+            <a th:href="@{/profile(userId=${recipient.userId})}">К анкете ↗</a>
+          </div>
+          <div aria-label="История сообщений" class="chat-body" data-chat-body="" tabindex="0">
+            <p class="notice" data-chat-empty="" th:hidden="${!#lists.isEmpty(messages)}">Здесь пока нет сообщений. Напишите первое приветствие. После него дождитесь ответа или принятия заявки.</p>
+            <p class="bubble" th:classappend="${message.senderId == currentUserId} ? 'out' : 'in'" th:data-message-id="${message.id}" th:each="message : ${messages}">
+              <span class="message-content" th:text="${message.content}"></span>
+              <br/>
+              <time th:datetime="${message.sentAt}" th:text="${#temporals.format(message.sentAt, 'dd.MM HH:mm')}"></time>
+            </p>
+          </div>
+          <p class="notice" data-send-restriction="" th:hidden="${canSend}">Дождитесь ответа или принятия заявки, чтобы продолжить переписку.</p>
+
+          <form class="compose" data-message-form="" method="post" th:action="@{/conversation}">
+            <input name="receiverId" th:value="${recipient.userId}" type="hidden"/>
+            <label for="message-content">
+              Сообщение
+              <textarea autocomplete="off" class="textarea" id="message-content" maxlength="4000" name="content" placeholder="Написать сообщение…" required="" rows="2" th:disabled="${!canSend}"></textarea>
+            </label>
+            <button class="button" th:disabled="${!canSend}" type="submit">Отправить ↗</button>
+          </form>
+
+        </section>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© 2026 swipely 18+ · Только для совершеннолетних</span>
+        <div class="footer-links">
+          <a href="/safety" th:href="@{/safety}">Безопасность</a>
+          <a href="/help" th:href="@{/help}">Помощь</a>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>

@@ -31,4 +31,27 @@ public class ProfileResponse {
 
     private String preferences;
     private String avatarUrl;
+
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public Integer getAge() {
+        return birthdate == null ? null : java.time.Period.between(birthdate, java.time.LocalDate.now()).getYears();
+    }
+
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public java.util.List<String> getInterestList() {
+        if (interests == null || interests.isBlank()) return java.util.List.of();
+        return java.util.Arrays.stream(interests.split(","))
+                .map(String::trim).filter(value -> !value.isEmpty()).distinct().toList();
+    }
+
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    public String getGoalLabel() {
+        if (goal == null) return "";
+        return switch (goal) {
+            case "relationship" -> "Отношения";
+            case "friendship" -> "Дружбу и общение";
+            case "unsure" -> "Пока не знаю";
+            default -> goal;
+        };
+    }
 }

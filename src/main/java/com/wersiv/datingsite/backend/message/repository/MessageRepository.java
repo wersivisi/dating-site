@@ -11,9 +11,12 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
+    @Query("select m from Message m where m.senderId = :userId or m.receiverId = :userId order by m.sentAt desc, m.id desc")
+    List<Message> findForUser(@Param("userId") Long userId);
+
     @Query("select m from Message m where " +
             "(m.senderId = :userA and m.receiverId = :userB) or " +
             "(m.senderId = :userB and m.receiverId = :userA) " +
-            "order by m.sentAt asc")
+            "order by m.sentAt asc, m.id asc")
     List<Message> findConversation(@Param("userA") Long userA, @Param("userB") Long userB);
 }

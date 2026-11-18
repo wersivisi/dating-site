@@ -1,1 +1,46 @@
-<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Пароль изменён — swipely</title><link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}"></head><body><header class="header"><div class="header-inner"><a class="brand" href="/" th:href="@{/}"><span class="brand-mark">♡</span>swipely</a><a href="/" th:href="@{/}" style="color:var(--muted);font-size:12px">← На главную</a></div></header><main class="auth-wrap"><p class="notice" role="alert" th:if="${error}" th:text="${error}"></p><p class="notice" role="status" th:if="${notice}" th:text="${notice}"></p><section class="auth-card"><p class="eyebrow">✦ ВОССТАНОВЛЕНИЕ ДОСТУПА</p><h1>ВХОД В АККАУНТ.</h1><p>Если пароль был изменён, войдите с новым паролем.</p><a class="button" href="/login" th:href="@{/login}">Войти　↗</a><p class="auth-motto">— ТВОЙ ЧЕЛОВЕК. ТВОЙ ВАЙБ. —</p></section></main><footer class="footer"><div class="footer-inner"><span>© 2026 swipely　 18+ · Только для совершеннолетних</span><div class="footer-links"><a href="/privacy" th:href="@{/privacy}">Конфиденциальность</a><a href="/terms" th:href="@{/terms}">Условия</a></div></div></footer></body></html>
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>Пароль изменён — swipely</title>
+    <link href="/css/styles.css" rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <script defer="" th:src="@{/js/site.js}"></script>
+  </head>
+
+  <body>
+
+    <header class="header">
+      <div class="header-inner">
+        <a class="brand" href="/" th:href="@{/}"><span class="brand-mark">♡</span>swipely</a>
+        <a href="/" style="color:var(--muted);font-size:12px" th:href="@{/}">← На главную</a>
+      </div>
+    </header>
+
+    <main class="auth-wrap">
+      <p class="notice" role="alert" th:if="${error}" th:text="${error}"></p>
+      <p class="notice" role="status" th:if="${notice}" th:text="${notice}"></p>
+
+      <section class="auth-card">
+        <p class="eyebrow">✦ ВОССТАНОВЛЕНИЕ ДОСТУПА</p>
+        <h1>ВХОД В АККАУНТ.</h1>
+        <p>Если пароль был изменён, войдите с новым паролем.</p>
+        <a class="button" href="/login" th:href="@{/login}">Войти ↗</a>
+        <p class="auth-motto">— ТВОЙ ЧЕЛОВЕК. ТВОЙ ВАЙБ. —</p>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© 2026 swipely 18+ · Только для совершеннолетних</span>
+        <div class="footer-links">
+          <a href="/privacy" th:href="@{/privacy}">Конфиденциальность</a>
+          <a href="/terms" th:href="@{/terms}">Условия</a>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>

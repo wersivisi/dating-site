@@ -19,6 +19,18 @@ import java.util.List;
 public class MessageController {
 
     private final MessageService messageService;
+    private final com.wersiv.datingsite.backend.message.service.ConversationService conversations;
+
+    @GetMapping("/conversations")
+    public List<com.wersiv.datingsite.backend.message.dto.ConversationResponse> conversations(@AuthenticationPrincipal UserPrincipal principal) {
+        return conversations.list(principal.getId());
+    }
+
+    @GetMapping("/with/{userId}/state")
+    public com.wersiv.datingsite.backend.message.dto.ConversationState state(@AuthenticationPrincipal UserPrincipal principal,
+                                                                           @PathVariable Long userId) {
+        return conversations.state(principal.getId(), userId);
+    }
 
     @PostMapping
     public ResponseEntity<MessageResponse> send(@AuthenticationPrincipal UserPrincipal principal,
@@ -30,6 +42,6 @@ public class MessageController {
     @GetMapping("/with/{userId}")
     public ResponseEntity<List<MessageResponse>> getConversation(@AuthenticationPrincipal UserPrincipal principal,
                                                                     @PathVariable Long userId) {
-        return ResponseEntity.ok(messageService.getConversation(principal.getId(), userId));
+        return ResponseEntity.ok(conversations.state(principal.getId(), userId).messages());
     }
 }

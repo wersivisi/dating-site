@@ -1,1 +1,85 @@
-<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Симпатии — swipely</title><link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}"></head><body><header class="header"><div class="header-inner"><a class="brand" href="/" th:href="@{/}"><span class="brand-mark">♡</span>swipely</a><nav class="app-nav"><a href="/discover" th:href="@{/discover}">Анкеты</a><a class="active" href="/likes" th:href="@{/likes}">Симпатии</a><a href="/messages" th:href="@{/messages}">Сообщения</a></nav><a class="user-nav" href="/my-profile" th:href="@{/my-profile}"><span class="avatar">♡</span>Мой профиль⌄</a></div></header><main class="app-main container"><p class="notice" role="alert" th:if="${error}" th:text="${error}"></p><p class="notice" role="status" th:if="${notice}" th:text="${notice}"></p><div class="heading"><h1>ТВОИ СИМПАТИИ.</h1></div><nav class="tabs"><a th:classappend="${tab == 'mutual'} ? 'active'" th:href="@{/likes(tab='mutual')}">Взаимные</a><a th:classappend="${tab == 'incoming'} ? 'active'" th:href="@{/likes(tab='incoming')}">Нравлюсь</a><a th:classappend="${tab == 'outgoing'} ? 'active'" th:href="@{/likes(tab='outgoing')}">Мои симпатии</a></nav><p class="notice" th:if="${#lists.isEmpty(profiles)}">Здесь пока нет симпатий. <a th:href="@{/discover}">Посмотреть анкеты</a></p><div class="profile-grid"><article class="person-card" th:each="person : ${profiles}"><a class="person-photo" th:href="@{/profile(userId=${person.userId})}"><img th:if="${person.avatarUrl}" th:src="@{${person.avatarUrl}}" alt="Фото пользователя"><span th:unless="${person.avatarUrl}" class="photo-placeholder">♡</span></a><div class="person-info"><h3 th:text="${person.displayName}"></h3><p th:text="${person.city}"></p><p th:text="${person.bio}"></p><div class="chips"><span th:text="${person.interests}"></span></div></div><a th:if="${tab == 'mutual'}" class="button card-cta" th:href="@{/conversation(userId=${person.userId})}">Начать разговор ↗</a><form th:if="${tab == 'incoming'}" method="post" th:action="@{/friends/{id}/accept(id=${person.userId})}"><button class="button card-cta">Ответить взаимностью</button></form><p th:if="${tab == 'outgoing'}" class="notice">Ожидаем ответа</p></article></div></main><footer class="footer"><div class="footer-inner"><span>© 2026 swipely　 18+ · Только для совершеннолетних</span><div class="footer-links"><a href="/safety" th:href="@{/safety}">Безопасность</a><a href="/help" th:href="@{/help}">Помощь</a></div></div></footer></body></html>
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>Симпатии — swipely</title>
+    <link href="/css/styles.css" rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <script defer="" th:src="@{/js/site.js}"></script>
+  </head>
+
+  <body>
+
+    <header class="header">
+      <div class="header-inner">
+        <a class="brand" href="/" th:href="@{/}"><span class="brand-mark">♡</span>swipely</a>
+        <nav class="app-nav">
+          <a href="/discover" th:href="@{/discover}">Анкеты</a>
+          <a class="active" href="/likes" th:href="@{/likes}">Симпатии</a>
+          <a href="/messages" th:href="@{/messages}">Сообщения</a>
+        </nav>
+        <a class="user-nav" href="/my-profile" th:href="@{/my-profile}"><span class="avatar">♡</span>Мой профиль⌄</a>
+      </div>
+    </header>
+
+    <main class="app-main container">
+      <p class="notice" role="alert" th:if="${error}" th:text="${error}"></p>
+      <p class="notice" role="status" th:if="${notice}" th:text="${notice}"></p>
+      <div class="heading">
+        <p class="eyebrow">✦ ТВОИ СИМПАТИИ</p>
+        <h1>КАЖЕТСЯ, ЭТО ВЗАИМНО.</h1>
+        <p>Когда вы нравитесь друг другу, можно начать разговор.</p>
+      </div>
+      <nav class="tabs">
+        <a th:classappend="${tab == 'mutual'} ? 'active'" th:href="@{/likes(tab='mutual')}" th:text="'Взаимные · ' + ${mutualCount}">Взаимные</a>
+        <a th:classappend="${tab == 'incoming'} ? 'active'" th:href="@{/likes(tab='incoming')}" th:text="'Нравлюсь · ' + ${incomingCount}">Нравлюсь</a>
+        <a th:classappend="${tab == 'outgoing'} ? 'active'" th:href="@{/likes(tab='outgoing')}" th:text="'Мои симпатии · ' + ${outgoingCount}">Мои симпатии</a>
+      </nav>
+      <div class="banner" style="margin-top:24px">
+        <span class="banner-icon">♡</span>
+        <div>
+          <strong>Первое «привет» — уже начало</strong>
+          <p>Напиши об общем интересе. Хорошему разговору не нужен идеальный сценарий.</p>
+        </div>
+      </div>
+      <p class="notice" th:if="${#lists.isEmpty(profiles)}">Здесь пока нет симпатий. <a th:href="@{/discover}">Посмотреть анкеты</a></p>
+      <div class="profile-grid">
+        <article class="person-card" th:each="person : ${profiles}">
+          <a class="person-photo" th:href="@{/profile(userId=${person.userId})}">
+            <img alt="Фото пользователя" th:if="${person.avatarUrl}" th:src="@{${person.avatarUrl}}"/>
+            <span aria-hidden="true" class="photo-placeholder" th:unless="${person.avatarUrl}">♡</span>
+            <span class="match" th:if="${!#lists.isEmpty(person.interestList)}" th:text="'✦ ' + ${person.interestList[0]}"></span>
+          </a>
+          <div class="person-info">
+            <h3 th:text="${person.displayName + (person.age != null ? ', ' + person.age : '')}"></h3>
+            <p th:text="${person.city}"></p>
+            <p th:text="${person.bio}"></p>
+            <div class="chips" th:if="${!#lists.isEmpty(person.interestList)}">
+              <span th:each="interest : ${person.interestList}" th:text="${interest}"></span>
+            </div>
+          </div>
+          <a class="button card-cta" th:href="@{/conversation(userId=${person.userId})}" th:if="${tab == 'mutual'}">Начать разговор ↗</a>
+
+          <form method="post" th:action="@{/friends/{id}/accept(id=${person.userId})}" th:if="${tab == 'incoming'}">
+            <button class="button card-cta">Ответить взаимностью</button>
+          </form>
+
+          <p class="notice" th:if="${tab == 'outgoing'}">Ожидаем ответа</p>
+        </article>
+      </div>
+      <p style="color:var(--muted);font-size:11px;margin-top:20px"> Новые совпадения появятся здесь. Уже начатые диалоги — в «Сообщениях». </p>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© 2026 swipely 18+ · Только для совершеннолетних</span>
+        <div class="footer-links">
+          <a href="/safety" th:href="@{/safety}">Безопасность</a>
+          <a href="/help" th:href="@{/help}">Помощь</a>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>

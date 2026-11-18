@@ -1,1 +1,97 @@
-<!doctype html><html lang="ru" xmlns:th="http://www.thymeleaf.org"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Анкета — swipely</title><link rel="stylesheet" href="/css/styles.css" th:href="@{/css/styles.css}"></head><body><header class="header"><div class="header-inner"><a class="brand" href="/" th:href="@{/}"><span class="brand-mark">♡</span>swipely</a><nav class="app-nav"><a class="active" href="/discover" th:href="@{/discover}">Анкеты</a><a href="/likes" th:href="@{/likes}">Симпатии</a><a href="/messages" th:href="@{/messages}">Сообщения</a></nav><a class="user-nav" href="/my-profile" th:href="@{/my-profile}"><span class="avatar">♡</span>Мой профиль⌄</a></div></header><main class="app-main container"><p class="notice" role="alert" th:if="${error}" th:text="${error}"></p><p class="notice" role="status" th:if="${notice}" th:text="${notice}"></p><p><a class="text-link" th:href="@{/discover}">← К анкетам</a></p><div class="profile-detail"><div class="detail-photo"><img th:if="${profile.avatarUrl}" th:src="@{${profile.avatarUrl}}" alt="Фото пользователя"><span th:unless="${profile.avatarUrl}" class="photo-placeholder">♡</span></div><section class="detail-copy"><h1 th:text="${profile.displayName}"></h1><p th:text="${profile.city}"></p><p th:text="${profile.handle}"></p><h3>Пара слов обо мне</h3><p th:text="${profile.bio}"></p><h3>Интересы</h3><p th:text="${profile.interests}"></p><h3>Мой идеальный вечер</h3><p th:text="${profile.idealEvening}"></p><a th:if="${self}" class="button" th:href="@{/my-profile}">Редактировать профиль</a><div th:unless="${self}"><div th:if="${relationship == null or relationship.status.name() != 'BLOCKED'}"><form method="post" th:action="@{/friends/{id}/like(id=${profile.userId})}"><button class="button">♡ Нравится</button></form><p><a class="text-link" th:href="@{/conversation(userId=${profile.userId})}">Написать сообщение ↗</a></p><form method="post" th:action="@{/friends/{id}/block(id=${profile.userId})}"><button class="button outline">Заблокировать</button></form></div><p th:if="${relationship != null and relationship.status.name() == 'BLOCKED'}" class="notice">Общение заблокировано.</p></div></section></div></main><footer class="footer"><div class="footer-inner"><span>© 2026 swipely　 18+ · Только для совершеннолетних</span><div class="footer-links"><a href="/safety" th:href="@{/safety}">Безопасность</a><a href="/help" th:href="@{/help}">Помощь</a></div></div></footer></body></html>
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width,initial-scale=1" name="viewport"/>
+    <title>Анкета — swipely</title>
+    <link href="/css/styles.css" rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <script defer="" th:src="@{/js/site.js}"></script>
+  </head>
+
+  <body>
+
+    <header class="header">
+      <div class="header-inner">
+        <a class="brand" href="/" th:href="@{/}"><span class="brand-mark">♡</span>swipely</a>
+        <nav class="app-nav">
+          <a class="active" href="/discover" th:href="@{/discover}">Анкеты</a>
+          <a href="/likes" th:href="@{/likes}">Симпатии</a>
+          <a href="/messages" th:href="@{/messages}">Сообщения</a>
+        </nav>
+        <a class="user-nav" href="/my-profile" th:href="@{/my-profile}"><span class="avatar">♡</span>Мой профиль⌄</a>
+      </div>
+    </header>
+
+    <main class="app-main container">
+      <p class="notice" role="alert" th:if="${error}" th:text="${error}"></p>
+      <p class="notice" role="status" th:if="${notice}" th:text="${notice}"></p>
+      <div class="section-foot">
+        <a class="text-link" th:href="@{/discover}">← К анкетам</a>
+      </div>
+      <div class="profile-detail">
+        <div>
+          <div class="detail-photo">
+            <img alt="Фото пользователя" th:if="${profile.avatarUrl}" th:src="@{${profile.avatarUrl}}"/>
+            <span class="photo-placeholder" th:unless="${profile.avatarUrl}">♡</span>
+          </div>
+
+          <section class="panel" style="margin-top:16px" th:if="${!#strings.isEmpty(profile.idealEvening)}">
+            <small class="eyebrow">МОЙ ИДЕАЛЬНЫЙ ВЕЧЕР</small>
+            <p th:text="${profile.idealEvening}"></p>
+          </section>
+
+        </div>
+
+        <section class="detail-copy">
+          <h1 th:text="${profile.displayName + (profile.age != null ? ', ' + profile.age : '')}"></h1>
+          <p th:text="${profile.city}"></p>
+          <p th:text="${profile.handle}"></p>
+          <h3>Пара слов обо мне</h3>
+          <p th:text="${profile.bio}"></p>
+          <h3>Интересы</h3>
+          <div class="chips">
+            <span th:each="interest : ${profile.interestList}" th:text="${interest}"></span>
+          </div>
+
+          <section th:if="${!#strings.isEmpty(profile.goalLabel)}">
+            <hr/>
+            <h3>Ищу здесь</h3>
+            <p th:text="${profile.goalLabel}"></p>
+          </section>
+
+          <a class="button" th:href="@{/my-profile}" th:if="${self}">Редактировать профиль</a>
+          <div th:unless="${self}">
+            <div th:if="${relationship == null or relationship.status.name() != 'BLOCKED'}">
+
+              <form method="post" th:action="@{/friends/{id}/like(id=${profile.userId})}">
+                <button class="button">♡ Нравится</button>
+              </form>
+
+              <p><a class="text-link" th:href="@{/conversation(userId=${profile.userId})}">Написать сообщение ↗</a></p>
+
+              <form method="post" th:action="@{/friends/{id}/block(id=${profile.userId})}">
+                <button class="button outline">Заблокировать</button>
+              </form>
+
+            </div>
+            <p class="notice" th:if="${relationship != null and relationship.status.name() == 'BLOCKED'}">Общение заблокировано.</p>
+          </div>
+          <p class="notice">♧ Знакомься в своём ритме</p>
+        </section>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <span>© 2026 swipely 18+ · Только для совершеннолетних</span>
+        <div class="footer-links">
+          <a href="/safety" th:href="@{/safety}">Безопасность</a>
+          <a href="/help" th:href="@{/help}">Помощь</a>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>

@@ -1,6 +1,9 @@
 package com.wersiv.datingsite.backend.profile.dto;
 
+import com.wersiv.datingsite.backend.profile.validation.AdultBirthdate;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -26,6 +29,9 @@ public class CreateProfileRequest {
     @Size(max = 2000, message = "{validation.bio.size}")
     private String bio;
 
+    @NotNull(message = "{validation.birthdate.required}")
+    @AdultBirthdate
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private java.time.LocalDate birthdate;
 
     @Size(max = 255)

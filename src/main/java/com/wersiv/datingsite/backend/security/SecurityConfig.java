@@ -43,7 +43,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/avatars/**").permitAll()
-                        .requestMatchers("/", "/index", "/index.html", "/css/**", "/error",
+                        .requestMatchers("/", "/index", "/index.html", "/css/**", "/js/**", "/error",
                                 "/login", "/login.html", "/register", "/register.html",
                                 "/help", "/help.html", "/safety", "/safety.html", "/privacy", "/privacy.html",
                                 "/terms", "/terms.html", "/forgot-password", "/forgot-password.html",
