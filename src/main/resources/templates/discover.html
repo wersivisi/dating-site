@@ -39,12 +39,8 @@
           <input class="search" name="q" placeholder="Имя, город или интерес" th:value="${q}" type="search"/>
         </label>
         <label class="field">
-          Город
-          <select class="select" name="city">
-            <option value="">Любой город</option>
-            <option th:selected="${city == 'Москва'}">Москва</option>
-            <option th:selected="${city == 'Санкт-Петербург'}">Санкт-Петербург</option>
-          </select>
+          Населённый пункт
+          <input autocomplete="address-level2" class="input" maxlength="255" name="city" placeholder="Любой населённый пункт" th:value="${city}" type="text"/>
         </label>
         <label class="field">
           Цель знакомства

@@ -67,11 +67,8 @@
                 <input autocomplete="bday" class="input" name="birthdate" th:value="${profile.birthdate}" type="date"/>
               </label>
               <label>
-                Город
-                <select class="select" name="city">
-                  <option th:selected="${profile.city == 'Москва'}" value="Москва">Москва</option>
-                  <option th:selected="${profile.city == 'Санкт-Петербург'}" value="Санкт-Петербург">Санкт-Петербург</option>
-                </select>
+                Населённый пункт
+                <input autocomplete="address-level2" class="input" maxlength="255" name="city" placeholder="Введи название города, села или посёлка" th:value="${profile.city}" type="text"/>
               </label>
               <label>
                 Гендер
