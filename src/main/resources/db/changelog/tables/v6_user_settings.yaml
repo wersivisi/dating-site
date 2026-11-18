@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6-user-settings
+      author: wersiv
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: match_notifications
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: message_notifications
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email_news
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: show_online
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: show_distance
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: paused
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false

@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5-profile-details
+      author: wersiv
+      changes:
+        - addColumn:
+            tableName: profiles
+            columns:
+              - column:
+                  name: birthdate
+                  type: date
+              - column:
+                  name: city
+                  type: varchar(255)
+              - column:
+                  name: gender
+                  type: varchar(255)
+              - column:
+                  name: interests
+                  type: varchar(255)
+              - column:
+                  name: goal
+                  type: varchar(255)
+              - column:
+                  name: ideal_evening
+                  type: varchar(255)

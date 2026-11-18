@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/db.changelog-master.yaml
+  - changeSet:
+      id: portable-h2-text-columns
+      author: wersiv
+      dbms: h2
+      changes:
+        - modifyDataType:
+            tableName: messages
+            columnName: content
+            newDataType: varchar(4000)
+        - modifyDataType:
+            tableName: profiles
+            columnName: bio
+            newDataType: varchar(2000)
+        - modifyDataType:
+            tableName: profiles
+            columnName: preferences
+            newDataType: varchar(2000)
